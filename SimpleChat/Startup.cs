@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using SimpleChat.Controllers;
 
 namespace SimpleChat
 {
@@ -31,6 +32,7 @@ namespace SimpleChat
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SimpleChat", Version = "v1" });
             });
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,7 +51,11 @@ namespace SimpleChat
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapHub<MessageHub>("/chat");
+            });
         }
     }
 }
