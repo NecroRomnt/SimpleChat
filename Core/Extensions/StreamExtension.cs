@@ -23,4 +23,14 @@ public static class StreamExtension
 
         return memory.ToArray();
     }
+
+    /// <summary>
+    /// Get stream from byte array
+    /// </summary>
+    /// <param name="input">Input byte array</param>
+    /// <returns>Stream</returns>
+    public static Stream ToStream(this byte[] input)
+    {
+        return new MemoryStream(input);
+    }
 }

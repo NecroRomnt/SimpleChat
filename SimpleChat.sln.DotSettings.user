@@ -1,0 +1,8 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4aebc253_002D4bb6_002D4102_002Db463_002D67720a68334b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Roundtrip" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::682125A7-8A61-4159-91FC-B2E34AB1DFB0::net6.0::UnitTest.Core.Extensions.StreamTests.Roundtrip&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::682125A7-8A61-4159-91FC-B2E34AB1DFB0::net6.0::UnitTest.Core.Extensions.StreamTests.Test0&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::682125A7-8A61-4159-91FC-B2E34AB1DFB0::net6.0::UnitTest.Core.Impls.PotatoFileStorageTests.Roundtrip&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

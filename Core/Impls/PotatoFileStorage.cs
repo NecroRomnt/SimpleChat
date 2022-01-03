@@ -34,7 +34,7 @@ public class PotatoFileStorage: IFileStorage
         var fileInfo = _data.ContainsKey(id)
             ? _data[id]
             : FileDto.Empty;
-        var memory = new MemoryStream(fileInfo.Data);
+        var memory = fileInfo.Data.ToStream();
 
         return new SimpleFileImpl(fileInfo.Name, memory);
     }
