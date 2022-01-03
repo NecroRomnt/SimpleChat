@@ -51,11 +51,11 @@
         const inbox = document.getElementById("inbox");
         const receiveMessage = (user, message) => {
             console.log(user, message);
-            
+
             const messageElement = document.createElement("message-box");
             messageElement.setAttribute("user", user);
             messageElement.setAttribute("message", message);
-            
+
             inbox.appendChild(messageElement);
         }
 
@@ -92,14 +92,14 @@
     } else {
         window.onload = init;
     }
-    
-    customElements.define('message-box', class extends HTMLElement{
+
+    customElements.define('message-box', class extends HTMLElement {
         connectedCallback() {
             const shadow = this.attachShadow({mode: 'open'});
-            
+
             const username = this.getAttribute("user");
             const message = this.getAttribute("message");
-            
+
             shadow.innerHTML = `
             <style>
                 .text-muted {
