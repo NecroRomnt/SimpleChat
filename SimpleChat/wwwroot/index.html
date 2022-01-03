@@ -6,6 +6,7 @@
     <script async src="lib/signalr/signalr.min.js"></script>
     <script>
         const init = () => {
+            console.log("Initialization...");
             const connection = new signalR.HubConnectionBuilder()
                 .withUrl("/chat")
                 .build();
@@ -38,7 +39,16 @@
                 (error) => console.error(error)
             );
         }
-        document.addEventListener("DOMContentLoaded", init)
+        
+        if (typeof(window.onload) === 'function'){
+            const loopback = window.onload;
+            window.onload = (event) => {
+                loopback(event);
+                init(event);
+            }
+        }else{
+            window.onload = init;
+        }
     </script>
 </head>
 <body>
