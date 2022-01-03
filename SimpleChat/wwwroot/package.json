@@ -10,7 +10,7 @@
   },
   "copyFiles": [
     {
-      "from": "node_modules/@microsoft/signalr/dist/browser/*.min.js",
+      "from": "node_modules/@microsoft/signalr/dist/browser/*.min.js*",
       "to": "lib/signalr/"
     }
   ]
