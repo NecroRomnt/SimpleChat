@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <script async src="~/lib/signalr/signalr.min.js"></script>
+    <script>
+        const init = () => {
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/chat")
+                .build();
+            
+            const receiveMessage = (user, message) => {
+                console.log(user, message);
+            }
+                        
+            const sendMessage = (user, message) => {
+                console.debug(user, message);
+                connection
+                    .invoke("SendMessage", user, message)
+                    .catch(err => console.error(err));
+            }
+            
+            const sendButtonHandler = (event) => {
+                let user = document.getElementById("username").value;
+                let message= document.getElementById("message").value;
+                
+                sendMessage(user, message);
+                
+                event.preventDefault();
+            }
+            
+            connection.on("ReceiveMessage", receiveMessage);
+            document.getElementById("send").addEventListener("click", sendButtonHandler);
+            
+            connection.start().then(
+                () => document.getElementById("send").disabled = false,
+                (error) => console.error(error)
+            );
+        }
+        document.addEventListener("DOMContentLoaded", init)
+    </script>
+</head>
+<body>
+    <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username">
+    </div>
+    <div>
+        <label for="message">Message:</label>
+        <textarea id="message" cols="30" rows="10"></textarea>
+    </div>
+    <button id="send" disabled>Send</button>
+</body>
+</html>

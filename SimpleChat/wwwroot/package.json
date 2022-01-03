@@ -1,5 +1,17 @@
 {
   "dependencies": {
     "@microsoft/signalr": "^6.0.1"
-  }
+  },
+  "devDependencies": {
+    "copy-files-from-to": "^3.2.2"
+  },
+  "scripts": {
+    "postinstall": "copy-files-from-to"
+  },
+  "copyFiles": [
+    {
+      "from": "node_modules/@microsoft/signalr/dist/browser/*.min.js",
+      "to": "lib/signalr/"
+    }
+  ]
 }
