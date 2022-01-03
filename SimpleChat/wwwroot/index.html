@@ -3,63 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <title>Chat</title>
-    <script async src="lib/signalr/signalr.min.js"></script>
-    <script>
-        const init = () => {
-            console.log("Initialization...");
-            const connection = new signalR.HubConnectionBuilder()
-                .withUrl("/chat")
-                .build();
-            
-            const receiveMessage = (user, message) => {
-                console.log(user, message);
-            }
-                        
-            const sendMessage = (user, message) => {
-                console.debug(user, message);
-                connection
-                    .invoke("SendMessage", user, message)
-                    .catch(err => console.error(err));
-            }
-            
-            const sendButtonHandler = (event) => {
-                let user = document.getElementById("username").value;
-                let message= document.getElementById("message").value;
-                
-                sendMessage(user, message);
-                
-                event.preventDefault();
-            }
-            
-            connection.on("ReceiveMessage", receiveMessage);
-            document.getElementById("send").addEventListener("click", sendButtonHandler);
-            
-            connection.start().then(
-                () => document.getElementById("send").disabled = false,
-                (error) => console.error(error)
-            );
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+
+    <style>
+        footer {
+            position: fixed;
+            bottom: 10px;
+            right: 20px;
         }
-        
-        if (typeof(window.onload) === 'function'){
-            const loopback = window.onload;
-            window.onload = (event) => {
-                loopback(event);
-                init(event);
-            }
-        }else{
-            window.onload = init;
-        }
-    </script>
+    </style>
 </head>
-<body>
-    <div>
-        <label for="username">Username:</label>
-        <input type="text" id="username">
+<body class="py-2">
+<div class="container order-0">
+    <text id="inbox">
+    </text>
+</div>
+<footer class="footer py-2 order-1">
+    <div class="container">
+        <div class="order-1">
+            <div class="input-group">
+                <span class="input-group-text">
+                    <label for="message">Message:</label>
+                </span>
+                <textarea id="message" class="form-control" cols="60" rows="1"></textarea>
+            </div>
+        </div>
+        <div class="order-2">
+            <div class="input-group">
+                <label for="username"><span class="input-group-text">Username:</span></label>
+                <input type="text" id="username" class="form-control"/>
+                <div class="input-group-append">
+                    <button id="send" class="btn btn-primary" disabled>Send</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-        <label for="message">Message:</label>
-        <textarea id="message" cols="30" rows="10"></textarea>
-    </div>
-    <button id="send" disabled>Send</button>
+</footer>
+
+<script async src="lib/signalr/signalr.min.js"></script>
+<script async src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script>
+    const init = () => {
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chat")
+            .build();
+
+        const inbox = document.getElementById("inbox");
+        const receiveMessage = (user, message) => {
+            console.log(user, message);
+            
+            const messageElement = document.createElement("message-box");
+            messageElement.setAttribute("user", user);
+            messageElement.setAttribute("message", message);
+            
+            inbox.appendChild(messageElement);
+        }
+
+        const sendMessage = (user, message) => {
+            connection
+                .invoke("SendMessage", user, message)
+                .catch(err => console.error(err));
+        }
+
+        const sendButtonHandler = (event) => {
+            let user = document.getElementById("username").value;
+            let message = document.getElementById("message").value;
+
+            sendMessage(user, message);
+
+            event.preventDefault();
+        }
+
+        connection.on("ReceiveMessage", receiveMessage);
+        document.getElementById("send").addEventListener("click", sendButtonHandler);
+
+        connection.start().then(
+            () => document.getElementById("send").disabled = false,
+            (error) => console.error(error)
+        );
+    }
+
+    if (typeof (window.onload) === 'function') {
+        const loopback = window.onload;
+        window.onload = (event) => {
+            loopback(event);
+            init(event);
+        }
+    } else {
+        window.onload = init;
+    }
+    
+    customElements.define('message-box', class extends HTMLElement{
+        connectedCallback() {
+            const shadow = this.attachShadow({mode: 'open'});
+            
+            const username = this.getAttribute("user");
+            const message = this.getAttribute("message");
+            
+            shadow.innerHTML = `
+            <style>
+                .text-muted {
+                    --bs-text-opacity: 1;
+                    color: #6c757d !important;
+                }
+            </style>
+            <div class="container">
+                <span class="text-muted">${username}: </span>
+                <text>${message}</text>
+            </div>`
+        }
+    });
+</script>
 </body>
 </html>
