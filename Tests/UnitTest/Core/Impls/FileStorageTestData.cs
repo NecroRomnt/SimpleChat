@@ -10,7 +10,9 @@ public class  FileStorageTestData: IEnumerable<object[]>
 {
     public IEnumerable<IFileStorage> FileStorages()
     {
-        yield return new PotatoFileStorage();
+        var baseStorage = new PotatoFileStorage(); 
+        yield return baseStorage;
+        yield return new ZipWrapperFileStorage(baseStorage);
     }
 
     public IEnumerable<string> Samples()

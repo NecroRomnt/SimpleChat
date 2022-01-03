@@ -1,6 +1,7 @@
 using System.IO;
-using System.Linq;
+using System.Text;
 using Core.Abstractions;
+using Core.Extensions;
 using Xunit;
 
 namespace UnitTest.Core.Impls;
@@ -13,13 +14,13 @@ public class FileStorageTests
     public void Roundtrip(IFileStorage storage, string testData)
     {
         const string filename = "potato.poem";
-        using var memory = new MemoryStream(testData.Select(x => (byte)x).ToArray());
+        var bytes = Encoding.Unicode.GetBytes(testData);
+        using var memory = new MemoryStream(bytes);
         
         var id = storage.Upload(filename, memory);
         var sample = storage.Download(id);
 
-        using var reader = new StreamReader(sample.Data);
-        var samplePoem = reader.ReadToEnd();
+        var samplePoem = Encoding.Unicode.GetString(sample.Data.ToArray());
         
         Assert.Equal(filename, sample.Name);
         Assert.Equal(testData, samplePoem);

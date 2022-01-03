@@ -1,3 +1,5 @@
+using System.IO;
+using System.Text;
 using Core.Extensions;
 using Xunit;
 
@@ -19,4 +21,19 @@ public class StreamTests
         Assert.Equal(testData, sample);
     }
 
+
+    [Fact]
+    public void ZipRoundtrip()
+    {
+        var data = "Simple test text Примечания для тех, кто наследует этот метод";
+        var bytes = Encoding.Unicode.GetBytes(data);
+        using var memory = new MemoryStream(bytes);
+
+        using var compressed = memory.Compress();
+        using var decompressed = compressed.Decompress();
+
+        var sample = Encoding.Unicode.GetString(decompressed.ToArray());
+        
+        Assert.Equal(data, sample);
+    } 
 }

@@ -1,3 +1,5 @@
+using System.IO.Compression;
+
 namespace Core.Extensions;
 
 /// <summary>
@@ -32,5 +34,41 @@ public static class StreamExtension
     public static Stream ToStream(this byte[] input)
     {
         return new MemoryStream(input);
+    }
+
+    /// <summary>
+    /// Zip stream
+    /// </summary>
+    /// <param name="input">Input stream</param>
+    /// <returns>Zipped stream</returns>
+    public static Stream Compress(this Stream input)
+    {
+        var result = new MemoryStream();
+        
+        var compressor = new GZipStream(result, CompressionMode.Compress);
+        input.CopyTo(compressor);
+        compressor.Flush();
+        
+        result.Seek(0, SeekOrigin.Begin);
+        
+        return result;
+    }
+
+    /// <summary>
+    /// Unzip stream
+    /// </summary>
+    /// <param name="input">Unzip stream</param>
+    /// <returns>Unzipped stream</returns>
+    public static Stream Decompress(this Stream input)
+    {
+        var result = new MemoryStream();
+        
+        using var decompressor = new GZipStream(input, CompressionMode.Decompress);
+        decompressor.CopyTo(result);
+        decompressor.Flush();
+        
+        result.Seek(0, SeekOrigin.Begin);
+
+        return result;
     }
 }
