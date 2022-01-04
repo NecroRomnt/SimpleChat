@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.Abstractions;
+using Core.Impls;
+using Core.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -33,6 +36,12 @@ namespace SimpleChat
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SimpleChat", Version = "v1" });
             });
             services.AddSignalR();
+
+            services.AddSingleton<PotatoFileStorage>();
+            services.AddSingleton<IFileStorage, ZipWrapperFileStorage>(
+                x => new ZipWrapperFileStorage(x.GetService<PotatoFileStorage>()));
+            
+            services.AddScoped<IFileService, FileService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
