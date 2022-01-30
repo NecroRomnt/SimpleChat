@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Core.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,21 +17,24 @@ public class FilesController : Controller
         _fileService = fileService;
     }
     
-    [HttpPut("")]
+    [HttpPut()]
     public IActionResult Upload(IFormFile file)
     {
         using var f = file.ToFile();
         return Json(_fileService.Upload(f));
     }
 
-    [HttpGet("")]
-    public IActionResult Download(Guid fileId)
+    [HttpGet("{id:guid}")]
+    public IActionResult Download(Guid id)
     {
-        var file = _fileService.Download(fileId);
+        var file = _fileService.Download(id);
         if (file == default)
         {
             return new BadRequestResult();
         }
+
+        var fileName = Path.GetFileNameWithoutExtension(file.Name);
+        Response.Headers.Add("content-disposition", @$"attachment; name=""{fileName}""; filename=""{file.Name}""");
         return file.ToFileStream();
     }
 }
