@@ -31,11 +31,11 @@ public class PotatoFileStorage: IFileStorage
     /// <inheritdoc cref="IFileStorage.Download"/>
     public IFile Download(Guid id)
     {
-        var fileInfo = _data.ContainsKey(id)
-            ? _data[id]
-            : FileDto.Empty;
+        if (!_data.ContainsKey(id))
+            return default;
+        
+        var fileInfo = _data[id];
         var memory = fileInfo.Data.ToStream();
-
         return new SimpleFileImpl(fileInfo.Name, memory);
     }
 }

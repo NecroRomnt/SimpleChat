@@ -3,7 +3,7 @@ namespace Core.Abstractions;
 /// <summary>
 /// Basic file information
 /// </summary>
-public interface IFile
+public interface IFile: IDisposable
 {
     /// <summary>
     /// File name

@@ -17,9 +17,4 @@ public class FileDto
     /// File data
     /// </summary>
     public byte[] Data { get; }
-
-    /// <summary>
-    /// Empty/Not exists file
-    /// </summary>
-    public static readonly FileDto Empty = new FileDto(string.Empty, Array.Empty<byte>());
 }

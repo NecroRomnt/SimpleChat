@@ -22,7 +22,13 @@ public class ZipWrapperFileStorage: IFileStorage
 
     public IFile Download(Guid id)
     {
-        var (name, zipData) = _storage.Download(id);
+        var file = _storage.Download(id);
+        if (file == default)
+        {
+            return default;
+        }
+        
+        var (name, zipData) = file;
         var data = zipData.Decompress();
 
         return new SimpleFileImpl(name, data);
